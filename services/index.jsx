@@ -143,3 +143,29 @@ export const getPostDetails = async (slug) => {
   const result = await request(graphqlAPI, query, { slug });
   return result.post
 };
+export const getCategoriesPost = async(slug)=>{
+  const query = gql`
+  query MyQuery {
+    postsConnection(where: {categories_some: {slug_in: "food"}}) {
+      edges {
+        node {
+          title
+          featuredImage {
+            url
+          }
+        }
+      }
+    }
+  }
+  
+  `
+  const result = await request(graphqlAPI,query,{slug});
+  return result.postsConnection.edges;
+};
+export const submitComment = async(obj)=>{
+  const result = await fetch('/apj/comments',{
+    method:'POST',
+    body:JSON.stringify(obj),
+  });
+  return result.json();
+}
